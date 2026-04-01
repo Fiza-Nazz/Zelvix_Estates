@@ -78,7 +78,13 @@ const wideStats = [
 /* ─── Grid span config ─── */
 const colSpans = ["col-span-5", "col-span-7", "col-span-4", "col-span-4", "col-span-4", "col-span-12"];
 
-function ServiceCard({ svc, index, isWide }) {
+interface ServiceCardProps {
+  svc: typeof services[0];
+  index: number;
+  isWide: boolean;
+}
+
+function ServiceCard({ svc, index, isWide }: ServiceCardProps) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -242,7 +248,7 @@ function ServiceCard({ svc, index, isWide }) {
 
 /* ─── Sub-components ─── */
 
-function CardTag({ tag, hovered }) {
+function CardTag({ tag, hovered }: { tag: string; hovered: boolean }) {
   return (
     <div
       className="inline-flex items-center gap-[6px] mb-5 uppercase"
@@ -265,7 +271,7 @@ function CardTag({ tag, hovered }) {
   );
 }
 
-function IconBox({ Icon, hovered }) {
+function IconBox({ Icon, hovered }: { Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; hovered: boolean }) {
   return (
     <div
       className="flex items-center justify-center mb-6 relative"
@@ -316,7 +322,7 @@ function IconBox({ Icon, hovered }) {
   );
 }
 
-function CardTitle({ title, hovered }) {
+function CardTitle({ title, hovered }: { title: string; hovered: boolean }) {
   return (
     <h3
       className="mb-3 leading-tight"
@@ -333,7 +339,7 @@ function CardTitle({ title, hovered }) {
   );
 }
 
-function CardDesc({ desc, hovered }) {
+function CardDesc({ desc, hovered }: { desc: string; hovered: boolean }) {
   return (
     <p
       className="mb-6 leading-relaxed"
@@ -350,7 +356,7 @@ function CardDesc({ desc, hovered }) {
   );
 }
 
-function FeaturePills({ features, hovered }) {
+function FeaturePills({ features, hovered }: { features: string[]; hovered: boolean }) {
   return (
     <div className="flex flex-wrap gap-2">
       {features.map((f) => (

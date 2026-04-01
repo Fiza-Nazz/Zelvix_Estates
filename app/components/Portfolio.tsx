@@ -81,12 +81,24 @@ const spanClasses = [
   "col-span-3 row-span-1",
 ];
 
-function TypeIcon({ type }) {
-  if (type === "reel") return <FiFilm style={{ width: "10px", height: "10px" }} />;
-  return <FiImage style={{ width: "10px", height: "10px" }} />;
+import { FC } from "react";
+
+interface TypeIconProps {
+  type: string;
 }
 
-function PortfolioCard({ item, index, isFiltered }) {
+const TypeIcon: FC<TypeIconProps> = ({ type }) => {
+  if (type === "reel") return <FiFilm style={{ width: "10px", height: "10px" }} />;
+  return <FiImage style={{ width: "10px", height: "10px" }} />;
+};
+
+interface PortfolioCardProps {
+  item: typeof portfolioItems[0];
+  index: number;
+  isFiltered: boolean;
+}
+
+const PortfolioCard: FC<PortfolioCardProps> = ({ item, index, isFiltered }) => {
   const [hovered, setHovered] = useState(false);
 
   const spanClass = isFiltered

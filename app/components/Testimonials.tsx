@@ -58,9 +58,9 @@ const StarIcon = () => (
 );
 
 const variants = {
-  enter: (dir) => ({ opacity: 0, x: dir > 0 ? 56 : -56, scale: 0.98 }),
+  enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? 56 : -56, scale: 0.98 }),
   center: { opacity: 1, x: 0, scale: 1 },
-  exit: (dir) => ({ opacity: 0, x: dir > 0 ? -56 : 56, scale: 0.98 }),
+  exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -56 : 56, scale: 0.98 }),
 };
 
 export default function Testimonials() {
@@ -78,7 +78,7 @@ export default function Testimonials() {
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   }, []);
 
-  const goTo = useCallback((i) => {
+  const goTo = useCallback((i: number) => {
     setDirection(i > currentIndex ? 1 : -1);
     setCurrentIndex(i);
   }, [currentIndex]);

@@ -58,7 +58,7 @@ const steps = [
 ];
 
 export default function Process() {
-  const [hovered, setHovered] = useState(null);
+  const [hovered, setHovered] = useState<number | null>(null);
 
   return (
     <>
