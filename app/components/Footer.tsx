@@ -1,13 +1,17 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import Image from "next/image";
 import {
   FiFacebook,
   FiInstagram,
   FiPhone,
   FiArrowUp,
+  FiMail,
+  FiChevronRight,
 } from "react-icons/fi";
+
+/* ─── Data ─────────────────────────────────────────────────────────────────── */
 
 const quickLinks = [
   { name: "Home", href: "#home" },
@@ -29,106 +33,407 @@ const services = [
 ];
 
 const socialLinks = [
-  { icon: FiInstagram, href: "https://www.instagram.com/zelvixestates?igsh=MWJwMTM4dnliYTJzdg==", label: "Instagram" },
-  { icon: FiFacebook,  href: "https://www.facebook.com/share/1DfyQyHnF3/",                        label: "Facebook" },
+  {
+    icon: FiInstagram,
+    href: "https://www.instagram.com/zelvixestates?igsh=MWJwMTM4dnliYTJzdg==",
+    label: "Instagram",
+  },
+  {
+    icon: FiFacebook,
+    href: "https://www.facebook.com/share/1DfyQyHnF3/",
+    label: "Facebook",
+  },
 ];
 
 const contactInfo = [
-  { icon: FiPhone,      text: "+91 85728 95525",  href: "tel:+918572895525",  label: "Call / WhatsApp" },
-  { icon: FiPhone,      text: "+91 83980 95525",  href: "tel:+918398095525",  label: "Call / WhatsApp" },
-  { icon: FiInstagram,  text: "@zelvixestates",   href: "https://www.instagram.com/zelvixestates?igsh=MWJwMTM4dnliYTJzdg==", label: "Instagram" },
-  { icon: FiFacebook,   text: "Zelvix Estates",   href: "https://www.facebook.com/share/1DfyQyHnF3/", label: "Facebook" },
+  {
+    icon: FiPhone,
+    label: "Phone / WhatsApp",
+    lines: ["+91 85728 95525", "+91 83980 95525"],
+    href: "tel:+918572895525",
+  },
+  {
+    icon: FiInstagram,
+    label: "Instagram",
+    lines: ["@zelvixestates"],
+    href: "https://www.instagram.com/zelvixestates?igsh=MWJwMTM4dnliYTJzdg==",
+  },
+  {
+    icon: FiFacebook,
+    label: "Facebook",
+    lines: ["Zelvix Estates"],
+    href: "https://www.facebook.com/share/1DfyQyHnF3/",
+  },
 ];
 
-const NAVY  = "#0d1f4c";
-const GOLD  = "#c9963b";
+/* ─── Tokens ────────────────────────────────────────────────────────────────── */
+const NAVY = "#0d1f4c";
+const GOLD = "#c9963b";
 const GOLDL = "#e5b55a";
+const WHITE = "#ffffff";
 
+/* ─── Animation variants ────────────────────────────────────────────────────── */
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 28 },
+  show: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.55,
+      delay: i * 0.11,
+      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+    },
+  }),
+};
+
+/* ─── Component ─────────────────────────────────────────────────────────────── */
 export default function Footer() {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
     <>
+      {/* ── Global styles ─────────────────────────────────────────────────── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
-        .zf-footer { font-family: 'DM Sans', sans-serif; }
-        .zf-link { color: rgba(13,31,76,0.45); font-size:13px; text-decoration:none; display:flex; align-items:center; gap:8px; transition:color 0.2s ease; }
-        .zf-link:hover { color: ${GOLD}; }
-        .zf-link:hover .zf-link-dot { background: ${GOLDL}; }
-        .zf-social { width:36px;height:36px;background:rgba(13,31,76,0.05);border:1px solid rgba(13,31,76,0.1);display:flex;align-items:center;justify-content:center;color:rgba(13,31,76,0.45);font-size:14px;text-decoration:none;transition:all 0.25s ease; }
-        .zf-social:hover { background:${NAVY};border-color:${NAVY};color:#fff; }
-        .zf-bottom-link { color:rgba(13,31,76,0.35);font-size:12px;text-decoration:none;transition:color 0.2s; }
-        .zf-bottom-link:hover { color:${GOLD}; }
-        .zf-cta { display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:${NAVY};color:#fff;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;position:relative;overflow:hidden;transition:transform 0.2s,box-shadow 0.3s; }
-        .zf-cta::after { content:'';position:absolute;inset:0;background:linear-gradient(135deg,${GOLD},${GOLDL});transform:scaleX(0);transform-origin:left;transition:transform 0.35s cubic-bezier(.4,0,.2,1);z-index:0; }
-        .zf-cta:hover::after { transform:scaleX(1); }
-        .zf-cta:hover { transform:translateY(-2px);box-shadow:0 8px 28px rgba(201,150,59,0.28); }
-        .zf-cta span { position:relative;z-index:1; }
-        .zf-contact-link { display:flex;align-items:flex-start;gap:12px;text-decoration:none;transition:opacity 0.2s; }
-        .zf-contact-link:hover { opacity:0.8; }
-        @media(max-width:768px){
-          .zf-grid{grid-template-columns:1fr 1fr !important;}
-          .zf-brand{grid-column:1/-1 !important;}
-          .zf-bottom{flex-direction:column !important;align-items:center !important;text-align:center;}
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
+
+        /* ── Reset & base ── */
+        .zf * { box-sizing: border-box; }
+        .zf { font-family: 'DM Sans', sans-serif; width: 100%; position: relative; overflow: hidden; background: ${WHITE}; }
+
+        /* ── Background accent panel ── */
+        .zf-panel {
+          position: absolute;
+          top: 0; right: 0;
+          width: 34%;
+          height: 100%;
+          background: linear-gradient(155deg, ${NAVY} 0%, #162757 100%);
+          clip-path: polygon(22% 0%, 100% 0%, 100% 100%, 0% 100%);
+          pointer-events: none;
+          z-index: 0;
         }
-        @media(max-width:480px){
-          .zf-grid{grid-template-columns:1fr !important;}
-          .zf-footer-inner{padding:40px 20px !important;}
+        .zf-panel-seam {
+          position: absolute;
+          top: 0; right: calc(34% - 1.5px);
+          width: 1.5px; height: 100%;
+          background: linear-gradient(180deg, transparent, ${GOLD} 20%, ${GOLDL} 50%, ${GOLD} 80%, transparent);
+          pointer-events: none; z-index: 1;
+        }
+        .zf-dots {
+          position: absolute; inset: 0;
+          background-image: radial-gradient(circle, rgba(13,31,76,.05) 1.5px, transparent 1.5px);
+          background-size: 26px 26px;
+          pointer-events: none; z-index: 0;
+        }
+        .zf-glow {
+          position: absolute; bottom: -120px; left: -120px;
+          width: 480px; height: 480px;
+          background: radial-gradient(circle, rgba(201,150,59,.08) 0%, transparent 70%);
+          filter: blur(50px);
+          pointer-events: none; z-index: 0;
+        }
+
+        /* ── Top gold rule ── */
+        .zf-rule {
+          width: 100%; height: 3px;
+          background: linear-gradient(90deg, transparent, ${GOLD} 25%, ${GOLDL} 50%, ${GOLD} 75%, transparent);
+          position: relative; z-index: 2;
+        }
+
+        /* ── Scroll-to-top ── */
+        .zf-scroll-wrap {
+          position: relative; z-index: 10;
+          display: flex; justify-content: flex-end;
+          padding: 0 clamp(16px, 4vw, 40px);
+        }
+        .zf-scroll-btn {
+          width: 44px; height: 44px;
+          margin-top: 16px;
+          background: ${NAVY};
+          border: 2px solid ${GOLD};
+          border-radius: 50%;
+          display: flex; align-items: center; justify-content: center;
+          color: ${GOLD}; font-size: 16px;
+          cursor: pointer; transition: box-shadow .25s, transform .25s;
+        }
+        .zf-scroll-btn:hover { box-shadow: 0 8px 24px rgba(201,150,59,.35); transform: translateY(-4px); }
+
+        /* ── Inner container ── */
+        .zf-inner {
+          position: relative; z-index: 2;
+          max-width: 1200px; margin: 0 auto;
+          padding: 52px clamp(16px, 5vw, 48px) 0;
+        }
+
+        /* ── 4-col grid (default → desktop) ── */
+        .zf-grid {
+          display: grid;
+          grid-template-columns: 1.35fr 1fr 1fr 1fr;
+          gap: clamp(24px, 3vw, 48px);
+          align-items: start;
+        }
+
+        /* ── Column headings ── */
+        .zf-col-title {
+          font-size: 10px; font-weight: 700;
+          letter-spacing: 2.5px; text-transform: uppercase;
+          color: ${NAVY};
+          margin: 0 0 18px;
+          padding-bottom: 12px;
+          border-bottom: 1px solid rgba(13,31,76,.1);
+        }
+
+        /* ── Brand ── */
+        .zf-brand-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+        .zf-brand-name { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22px; font-weight: 700; letter-spacing: 3px; color: ${NAVY}; line-height: 1; display: block; }
+        .zf-brand-sub  { font-size: 9px; letter-spacing: 3px; color: ${GOLD}; font-weight: 600; text-transform: uppercase; margin-top: 3px; display: block; }
+        .zf-brand-copy { color: rgba(13,31,76,.5); font-size: 13px; line-height: 1.8; font-weight: 300; max-width: 260px; margin: 0 0 22px; }
+        .zf-socials { display: flex; gap: 8px; flex-wrap: wrap; }
+        .zf-social-btn {
+          width: 36px; height: 36px;
+          background: rgba(13,31,76,.05);
+          border: 1px solid rgba(13,31,76,.1);
+          border-radius: 6px;
+          display: flex; align-items: center; justify-content: center;
+          color: rgba(13,31,76,.45); font-size: 14px;
+          text-decoration: none;
+          transition: background .25s, border-color .25s, color .25s, transform .2s;
+        }
+        .zf-social-btn:hover { background: ${NAVY}; border-color: ${NAVY}; color: ${WHITE}; transform: translateY(-2px); }
+
+        /* ── Nav links ── */
+        .zf-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; }
+        .zf-list-link {
+          display: flex; align-items: center; gap: 8px;
+          color: rgba(13,31,76,.45); font-size: 13px;
+          text-decoration: none;
+          transition: color .2s, gap .2s;
+        }
+        .zf-list-link:hover { color: ${GOLD}; gap: 11px; }
+        .zf-dot {
+          width: 4px; height: 4px; border-radius: 1px;
+          background: ${GOLD}; flex-shrink: 0;
+          transition: background .2s;
+        }
+        .zf-list-link:hover .zf-dot { background: ${GOLDL}; }
+
+        /* ── Contact items ── */
+        .zf-contact-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
+        .zf-contact-item {
+          display: flex; align-items: flex-start; gap: 12px;
+          text-decoration: none;
+          transition: opacity .2s;
+        }
+        .zf-contact-item:hover { opacity: .78; }
+        .zf-contact-icon {
+          width: 34px; height: 34px; flex-shrink: 0;
+          background: rgba(13,31,76,.05);
+          border: 1px solid rgba(13,31,76,.1);
+          border-radius: 6px;
+          display: flex; align-items: center; justify-content: center;
+          margin-top: 1px;
+        }
+        .zf-contact-text { display: flex; flex-direction: column; gap: 2px; padding-top: 2px; }
+        .zf-contact-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(13,31,76,.3); font-weight: 600; }
+        .zf-contact-value { font-size: 13px; color: rgba(13,31,76,.55); font-weight: 300; line-height: 1.55; }
+
+        /* ── CTA button ── */
+        .zf-cta-wrap { margin-top: 24px; }
+        .zf-cta {
+          display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+          width: 100%;
+          padding: 13px 24px;
+          background: ${NAVY};
+          color: ${WHITE};
+          font-family: 'DM Sans', sans-serif;
+          font-size: 11px; font-weight: 700;
+          letter-spacing: 1.5px; text-transform: uppercase;
+          text-decoration: none;
+          border-radius: 6px;
+          position: relative; overflow: hidden;
+          transition: transform .22s, box-shadow .3s;
+        }
+        .zf-cta::after {
+          content: '';
+          position: absolute; inset: 0;
+          background: linear-gradient(135deg, ${GOLD}, ${GOLDL});
+          transform: scaleX(0); transform-origin: left;
+          transition: transform .35s cubic-bezier(.4,0,.2,1);
+          z-index: 0;
+        }
+        .zf-cta:hover::after { transform: scaleX(1); }
+        .zf-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(201,150,59,.3); }
+        .zf-cta span { position: relative; z-index: 1; }
+
+        /* ── Divider ── */
+        .zf-divider {
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(13,31,76,.12) 20%, rgba(13,31,76,.12) 80%, transparent);
+          margin: 48px 0 0;
+        }
+
+        /* ── Bottom bar ── */
+        .zf-bottom {
+          display: flex; align-items: center; justify-content: space-between;
+          gap: 12px; flex-wrap: wrap;
+          padding: 20px 0 32px;
+        }
+        .zf-bottom-copy { color: rgba(13,31,76,.35); font-size: 12px; letter-spacing: .4px; margin: 0; }
+        .zf-bottom-links { display: flex; gap: 20px; flex-wrap: wrap; }
+        .zf-bottom-link { color: rgba(13,31,76,.3); font-size: 12px; text-decoration: none; transition: color .2s; }
+        .zf-bottom-link:hover { color: ${GOLD}; }
+
+        /* ════════════════════════════════════════════════════════════════════
+           RESPONSIVE BREAKPOINTS
+           ════════════════════════════════════════════════════════════════════ */
+
+        /* ── Large tablet (1024 ↓ 768) — 2+2 grid ── */
+        @media (max-width: 1023px) {
+          .zf-panel { width: 0; clip-path: none; display: none; }
+          .zf-panel-seam { display: none; }
+          .zf-glow { left: -80px; }
+
+          .zf-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 36px 32px;
+          }
+          .zf-brand-col { grid-column: 1 / -1; }
+          .zf-brand-copy { max-width: 460px; }
+
+          .zf-inner { padding-top: 44px; }
+        }
+
+        /* ── Small tablet / large mobile (max 767) — single column ── */
+        @media (max-width: 767px) {
+          .zf-grid {
+            grid-template-columns: 1fr;
+            gap: 28px;
+          }
+          .zf-brand-col { grid-column: 1; }
+          .zf-brand-copy { max-width: 100%; }
+
+          .zf-bottom {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 14px;
+          }
+          .zf-bottom-links { justify-content: center; }
+
+          .zf-scroll-wrap { justify-content: center; padding: 0; }
+          .zf-scroll-btn { margin-top: -22px; }
+
+          .zf-inner { padding-top: 36px; }
+        }
+
+        /* ── Mobile (max 480) ── */
+        @media (max-width: 480px) {
+          .zf-social-btn { width: 32px; height: 32px; font-size: 13px; }
+          .zf-brand-name { font-size: 20px; }
+          .zf-list-link, .zf-contact-value { font-size: 12.5px; }
+          .zf-col-title { font-size: 9.5px; }
+          .zf-bottom-copy, .zf-bottom-link { font-size: 11.5px; }
+          .zf-cta { font-size: 10.5px; padding: 12px 20px; }
+          .zf-divider { margin-top: 36px; }
+        }
+
+        /* ── Very small (max 360) ── */
+        @media (max-width: 360px) {
+          .zf-inner { padding-left: 14px; padding-right: 14px; }
+          .zf-list-link, .zf-contact-value { font-size: 12px; }
         }
       `}</style>
 
-      <footer className="zf-footer" style={{ background:"#ffffff", position:"relative", overflow:"hidden" }}>
+      {/* ── Footer root ────────────────────────────────────────────────────── */}
+      <footer className="zf">
+        {/* Decorative layers */}
+        <div className="zf-dots" aria-hidden="true" />
+        <div className="zf-panel" aria-hidden="true" />
+        <div className="zf-panel-seam" aria-hidden="true" />
+        <div className="zf-glow" aria-hidden="true" />
 
-        <div style={{ position:"absolute", inset:0, backgroundImage:`radial-gradient(circle, rgba(13,31,76,0.055) 1.5px, transparent 1.5px)`, backgroundSize:"28px 28px", pointerEvents:"none", zIndex:0 }} />
-        <div style={{ position:"absolute", top:0, right:0, width:"36%", height:"100%", background:`linear-gradient(155deg,${NAVY} 0%,#162757 100%)`, clipPath:"polygon(18% 0%,100% 0%,100% 100%,0% 100%)", pointerEvents:"none", zIndex:0 }} />
-        <div style={{ position:"absolute", top:0, right:"calc(36% - 2px)", width:"2px", height:"100%", background:`linear-gradient(180deg,transparent 0%,${GOLD} 20%,${GOLDL} 50%,${GOLD} 80%,transparent 100%)`, pointerEvents:"none", zIndex:1 }} />
-        <div style={{ position:"absolute", bottom:"-100px", left:"-100px", width:"400px", height:"400px", background:`radial-gradient(circle,rgba(201,150,59,0.07) 0%,transparent 70%)`, filter:"blur(40px)", pointerEvents:"none", zIndex:0 }} />
-        <div style={{ width:"100%", height:"3px", background:`linear-gradient(90deg,transparent,${GOLD} 30%,${GOLDL} 50%,${GOLD} 70%,transparent)`, position:"relative", zIndex:2 }} />
+        {/* Top gold rule */}
+        <div className="zf-rule" aria-hidden="true" />
 
-        <div style={{ position:"relative", zIndex:10, display:"flex", justifyContent:"flex-end", paddingRight:"32px" }}>
+        {/* Scroll-to-top */}
+        <div className="zf-scroll-wrap">
           <motion.button
             onClick={scrollToTop}
-            whileHover={{ scale:1.08, y:-2 }}
-            whileTap={{ scale:0.93 }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.92 }}
+            className="zf-scroll-btn"
             aria-label="Scroll to top"
-            style={{ marginTop:"-20px", width:"44px", height:"44px", background:NAVY, border:`2px solid ${GOLD}`, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", color:GOLD, fontSize:"16px" }}
           >
             <FiArrowUp />
           </motion.button>
         </div>
 
-        <div className="zf-footer-inner" style={{ position:"relative", zIndex:2, maxWidth:"1180px", margin:"0 auto", padding:"48px 24px 0" }}>
-          <div className="zf-grid" style={{ display:"grid", gridTemplateColumns:"1.4fr 1fr 1fr 1fr", gap:"48px" }}>
+        {/* ── Main content ── */}
+        <div className="zf-inner">
+          <div className="zf-grid">
 
-            {/* Brand */}
-            <motion.div className="zf-brand" initial={{ opacity:0, y:20 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.5 }}>
-              <div style={{ marginBottom:"20px", display:"flex", alignItems:"center", gap:"12px" }}>
-                <Image src="/logo.png" alt="Zelvix Logo" width={44} height={44} style={{ objectFit:"contain" }} />
+            {/* ── Brand ──────────────────────────────────── */}
+            <motion.div
+              className="zf-brand-col"
+              variants={fadeUp}
+              custom={0}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.15 }}
+            >
+              {/* Logo + name */}
+              <div className="zf-brand-logo">
+                <Image
+                  src="/logo.png"
+                  alt="Zelvix Logo"
+                  width={46}
+                  height={46}
+                  style={{ objectFit: "contain", borderRadius: "6px" }}
+                />
                 <div>
-                  <span style={{ display:"block", fontSize:"20px", fontWeight:800, letterSpacing:"3px", color:NAVY, fontFamily:"'Cormorant Garamond', Georgia, serif", lineHeight:1 }}>ZELVIX</span>
-                  <span style={{ display:"block", fontSize:"9px", letterSpacing:"3px", color:GOLD, fontWeight:600, textTransform:"uppercase", marginTop:"2px" }}>Real Estate</span>
+                  <span className="zf-brand-name">ZELVIX</span>
+                  <span className="zf-brand-sub">Real Estate Marketing</span>
                 </div>
               </div>
-              <p style={{ color:"rgba(13,31,76,0.5)", fontSize:"13px", lineHeight:1.8, marginBottom:"24px", fontWeight:300, maxWidth:"260px" }}>
-                The #1 digital marketing agency for real estate professionals. We help you get more leads, sales, and visibility online.
+
+              <p className="zf-brand-copy">
+                The #1 digital marketing agency for real estate professionals.
+                We help you generate more leads, close more sales, and dominate
+                your local market online.
               </p>
-              <div style={{ display:"flex", gap:"8px" }}>
+
+              {/* Social icons */}
+              <div className="zf-socials">
                 {socialLinks.map((s) => (
-                  <motion.a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} whileHover={{ y:-2 }} whileTap={{ scale:0.93 }} className="zf-social">
+                  <motion.a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className="zf-social-btn"
+                    whileHover={{ y: -3 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
                     <s.icon />
                   </motion.a>
                 ))}
               </div>
             </motion.div>
 
-            {/* Quick Links */}
-            <motion.div initial={{ opacity:0, y:20 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.5, delay:0.1 }}>
-              <h4 style={{ fontSize:"10px", fontWeight:700, letterSpacing:"2.5px", textTransform:"uppercase", color:NAVY, marginBottom:"20px", paddingBottom:"12px", borderBottom:`1px solid rgba(13,31,76,0.1)` }}>Quick Links</h4>
-              <ul style={{ display:"flex", flexDirection:"column", gap:"10px", listStyle:"none", padding:0, margin:0 }}>
+            {/* ── Quick Links ─────────────────────────────── */}
+            <motion.div
+              variants={fadeUp}
+              custom={1}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.15 }}
+            >
+              <p className="zf-col-title">Quick Links</p>
+              <ul className="zf-list">
                 {quickLinks.map((link) => (
                   <li key={link.name}>
-                    <a href={link.href} className="zf-link">
-                      <span className="zf-link-dot" style={{ width:"4px", height:"4px", background:GOLD, display:"inline-block", flexShrink:0, transition:"background 0.2s" }} />
+                    <a href={link.href} className="zf-list-link">
+                      <span className="zf-dot" />
                       {link.name}
                     </a>
                   </li>
@@ -136,14 +441,20 @@ export default function Footer() {
               </ul>
             </motion.div>
 
-            {/* Services */}
-            <motion.div initial={{ opacity:0, y:20 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.5, delay:0.2 }}>
-              <h4 style={{ fontSize:"10px", fontWeight:700, letterSpacing:"2.5px", textTransform:"uppercase", color:NAVY, marginBottom:"20px", paddingBottom:"12px", borderBottom:`1px solid rgba(13,31,76,0.1)` }}>Our Services</h4>
-              <ul style={{ display:"flex", flexDirection:"column", gap:"10px", listStyle:"none", padding:0, margin:0 }}>
+            {/* ── Services ────────────────────────────────── */}
+            <motion.div
+              variants={fadeUp}
+              custom={2}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.15 }}
+            >
+              <p className="zf-col-title">Our Services</p>
+              <ul className="zf-list">
                 {services.map((s) => (
                   <li key={s}>
-                    <a href="#services" className="zf-link">
-                      <span className="zf-link-dot" style={{ width:"4px", height:"4px", background:GOLD, display:"inline-block", flexShrink:0, transition:"background 0.2s" }} />
+                    <a href="#services" className="zf-list-link">
+                      <span className="zf-dot" />
                       {s}
                     </a>
                   </li>
@@ -151,42 +462,67 @@ export default function Footer() {
               </ul>
             </motion.div>
 
-            {/* Contact */}
-            <motion.div initial={{ opacity:0, y:20 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.5, delay:0.3 }}>
-              <h4 style={{ fontSize:"10px", fontWeight:700, letterSpacing:"2.5px", textTransform:"uppercase", color:NAVY, marginBottom:"20px", paddingBottom:"12px", borderBottom:`1px solid rgba(13,31,76,0.1)` }}>Contact Us</h4>
-              <ul style={{ display:"flex", flexDirection:"column", gap:"14px", listStyle:"none", padding:0, margin:0 }}>
+            {/* ── Contact ─────────────────────────────────── */}
+            <motion.div
+              variants={fadeUp}
+              custom={3}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.15 }}
+            >
+              <p className="zf-col-title">Contact Us</p>
+              <ul className="zf-contact-list">
                 {contactInfo.map((item, i) => (
                   <li key={i}>
-                    <a href={item.href} target="_blank" rel="noopener noreferrer" className="zf-contact-link">
-                      <div style={{ width:"32px", height:"32px", background:`rgba(13,31,76,0.05)`, border:`1px solid rgba(13,31,76,0.1)`, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, marginTop:"1px" }}>
-                        <item.icon style={{ color:GOLD, fontSize:"13px" }} />
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="zf-contact-item"
+                    >
+                      <div className="zf-contact-icon">
+                        <item.icon style={{ color: GOLD, fontSize: "14px" }} />
                       </div>
-                      <span style={{ color:"rgba(13,31,76,0.5)", fontSize:"13px", lineHeight:1.6, paddingTop:"6px", fontWeight:300 }}>
-                        {item.text}
-                      </span>
+                      <div className="zf-contact-text">
+                        <span className="zf-contact-label">{item.label}</span>
+                        {item.lines.map((line, j) => (
+                          <span key={j} className="zf-contact-value">{line}</span>
+                        ))}
+                      </div>
                     </a>
                   </li>
                 ))}
               </ul>
-              <motion.a href="#contact" whileHover={{ scale:1.03 }} whileTap={{ scale:0.97 }} className="zf-cta" style={{ marginTop:"24px" }}>
-                <span>Free Consultation →</span>
-              </motion.a>
+
+              {/* CTA */}
+              <div className="zf-cta-wrap">
+                <motion.a
+                  href="#contact"
+                  className="zf-cta"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  <span>Free Consultation →</span>
+                </motion.a>
+              </div>
             </motion.div>
 
-          </div>
+          </div>{/* /grid */}
 
-          {/* bottom bar */}
-          <div className="zf-bottom" style={{ marginTop:"52px", paddingTop:"20px", paddingBottom:"28px", borderTop:`1px solid rgba(13,31,76,0.1)`, display:"flex", alignItems:"center", justifyContent:"space-between", gap:"12px" }}>
-            <p style={{ color:"rgba(13,31,76,0.35)", fontSize:"12px", letterSpacing:"0.5px" }}>
+          {/* ── Bottom bar ── */}
+          <div className="zf-divider" aria-hidden="true" />
+          <div className="zf-bottom">
+            <p className="zf-bottom-copy">
               © {new Date().getFullYear()} Zelvix. All rights reserved.
             </p>
-            <div style={{ display:"flex", gap:"24px" }}>
+            <div className="zf-bottom-links">
               {["Privacy Policy", "Terms of Service"].map((item) => (
                 <a key={item} href="#" className="zf-bottom-link">{item}</a>
               ))}
             </div>
           </div>
-        </div>
+
+        </div>{/* /inner */}
       </footer>
     </>
   );
